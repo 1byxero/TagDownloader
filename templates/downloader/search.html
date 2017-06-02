@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Search</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+  	<style type="text/css">
+  		body {
+  			padding-top: 50px;
+  		}
+		.starter-template {
+			padding: 40px 15px;
+			text-align: center;
+		}
+  	</style>
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">TagDownloder</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+
+      <div class="starter-template">
+        
+        {%if search%}
+        <!-- this part will be rendered to search for a tag -->
+          <form class="navbar-form navbar-left" role="search" method="post" action=".">
+		        <div class="form-group">
+		          <label>Search Tag</label>
+		          <input type="text" class="form-control" name="tag" placeholder="Search Tag">
+		        </div>
+		        <button type="submit" class="btn btn-default">Submit</button>
+		      </form>
+        {%endif%}
+
+        {%if getlocation%}
+        <!-- this part will render when searching is done and download locations is requested -->
+          <h1>Found {{item_count}} images for tag "{{tag}}".</h1>
+          <p>
+            To download them all, enter location to save all the pics.<br>
+            Please give complete path to the location and not relative.
+          </p>
+            
+            <form class="navbar-form navbar-left" role="search" method="post" action=".">
+              <div class="form-group">
+                <label>Download Location</label>
+                <input type="text" class="form-control" name="location" placeholder="Search Tag">
+              </div>
+                <input type="hidden" class="form-control" name="tag" value="{{tag}}">
+              <button type="submit" class="btn btn-default">Submit</button>
+            </form>
+        {%endif%}
+
+      </div>
+
+    </div><!-- /.container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+  </body>
+</html>
