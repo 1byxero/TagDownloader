@@ -41,37 +41,28 @@
     <div class="container">
 
       <div class="starter-template">
+        <div class="panel panel-default">
+        <!-- Default panel contents -->
+        <div class="panel-heading">Images</div>
+
+        <!-- Table -->
+        <table class="table">
+          <tr>
+            <th>#</th>
+            <th>Link</th>
+            <th>Preview</th>
+          </tr>
+          {% for i in piclist%}
+          <tr>
+          <th>{{ forloop.counter }}</th>
+          <th><a href="{{i}}">{{i}}</a></th>
+          <th><img src='{{i}}' height="100" width="100"></th>
+          </tr>
+          {% endfor %}
+        </table>
         
-        {%if search%}
-        <!-- this part will be rendered to search for a tag -->
-          <form class="navbar-form navbar-left" role="search" method="post" action=".">
-		        <div class="form-group">
-		          <label>Search Tag</label>
-		          <input type="text" class="form-control" name="tag" placeholder="Search Tag">
-		        </div>
-		        <button type="submit" class="btn btn-default">Submit</button>
-		      </form>
-        {%endif%}
-
-        {%if getcount%}
-        <!-- this part will render when searching is done and download locations is requested -->
-          <h1>Found {{item_count}} images for tag "{{tag}}".</h1>
-          <p>
-            Enter count of pics you want to download.
-          </p>
-            
-            <form class="navbar-form navbar-left" role="search" method="post" action=".">
-              <div class="form-group">
-                <label>Image count</label>
-                <input type="text" class="form-control" name="count" placeholder="Image Count">
-              </div>
-                <input type="hidden" class="form-control" name="tag" value="{{tag}}">
-              <button type="submit" class="btn btn-default">Submit</button>
-            </form>
-        {%endif%}
-
+        </div>
       </div>
-
     </div><!-- /.container -->
 
 

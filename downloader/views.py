@@ -8,8 +8,8 @@ from django.views.decorators.csrf import csrf_exempt
 import requests, json, urllib
 # Create your views here.
 
-client_id = #"add client id here"
-client_secret = #"add client secret here"
+# client_id = #"add client id here"
+# client_secret = #"add client secret here"
 
 insta_auth_url = "https://api.instagram.com/oauth/authorize/?client_id=" + client_id
 insta_auth_url += "&redirect_uri=http://localhost:8000/authenticate/&response_type=code&scope=public_content"
@@ -35,6 +35,8 @@ def authenticate(request):
 	else:
 		return HttpResponse("Something went wrong in authentication")
 
+
+# need to take care of this decorator 
 @csrf_exempt
 def index(request):
 	auth = request.session.get('access_token')
@@ -51,7 +53,7 @@ def index(request):
 			return HttpResponse(template.render(context, request))
 		else:
 			access_token = auth
-			if request.POST.get('tag') and not request.POST.get("location"):
+			if request.POST.get('tag') and not request.POST.get("count"):
 				tag = request.POST.get('tag')
 				get_tag_count_url = "https://api.instagram.com/v1/tags/"+tag+"?access_token="+access_token
 				response = requests.get(get_tag_count_url)
@@ -59,7 +61,7 @@ def index(request):
 					item_count = response.json()["data"]["media_count"]
 					tag = response.json()["data"]["name"]
 					context = {
-						"getlocation": True,
+						"getcount": True,
 						"tag": tag,
 						"item_count": item_count,
 					}
@@ -74,31 +76,24 @@ def index(request):
 						#this will be added later
 						print ("redirecting to authentication")
 						return HttpResponseRedirect(insta_auth_url)
-			elif request.POST.get("location"):
-				location = request.POST.get("location")
+			elif request.POST.get("count"):
+				count = request.POST.get("count") #number of count of images bro
 				tag = request.POST.get("tag")
-				count = 10 #number of count of images bro
 				get_tag_content_url = "https://api.instagram.com/v1/tags/"+tag+"/media/recent?access_token="+access_token+"&count="+str(count)
 				response = requests.get(get_tag_content_url).json()
-				
 				image_urls = []
 				get_media_url = "https://api.instagram.com/v1/media/"
 				if response["meta"]["code"] == 200:
 					for i in response["data"]:
-						image_urls.append({
-							"name": i["id"],
-							"url": i["images"]["standard_resolution"]["url"]
-							})
-
-					outputresp = "Files with following url have been downloaded and saved at "+location+"<br>"
-
-					for i in image_urls:
-						testfile = urllib.URLopener()
-						testfile.retrieve(i["url"], location+"/"+i["name"]+".jpg")
-						outputresp += i["url"]+"<br>"
-
-					return HttpResponse(outputresp)
+					# 	image_urls.append({
+					# 		"name": i["id"],
+					# 		"url": i["images"]["standard_resolution"]["url"]
+					# 		})
+						image_urls.append(i["images"]["standard_resolution"]["url"])
+					context = {
+						"piclist": image_urls
+					}
+					template = loader.get_template('downloader/result.html')
+					return  HttpResponse(template.render(context, request))
 				else:
 					return HttpResponse("Something went Wrong with fetching the image urls")
-
-
