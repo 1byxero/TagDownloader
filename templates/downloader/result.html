@@ -43,25 +43,37 @@
       <div class="starter-template">
         <div class="panel panel-default">
         <!-- Default panel contents -->
-        <div class="panel-heading">Images</div>
+          <div class="panel-heading">Images</div>
 
-        <!-- Table -->
-        <table class="table">
-          <tr>
-            <th>#</th>
-            <th>Link</th>
-            <th>Preview</th>
-          </tr>
-          {% for i in piclist%}
-          <tr>
-          <th>{{ forloop.counter }}</th>
-          <th><a href="{{i}}">{{i}}</a></th>
-          <th><img src='{{i}}' height="100" width="100"></th>
-          </tr>
-          {% endfor %}
-        </table>
-        
+          <!-- Table -->
+          <table class="table">
+            <tr>
+              <th>#</th>
+              <th>Link</th>
+              <th>Preview</th>
+            </tr>
+            {% for i in piclist%}
+            <tr>
+            <th>{{ forloop.counter }}</th>
+            <th><a href="{{i}}">{{i}}</a></th>
+            <th><img src='{{i}}' height="100" width="100"></th>
+            </tr>
+            {% endfor %}
+          </table>
         </div>
+        <button onclick="copyUrlList('imageUrls')">Copy all image links</button>
+        <div>
+            <textarea id="imageUrls" style="visibility: hidden;">
+              {% for i in piclist%}
+              {{i}}
+              {% endfor %}
+            </textarea>
+        </div>
+        <div>
+        <p>
+          Press above button to copy all the image links to clipboard and then use tools like wget to download them all! 
+        </p>
+        </div>        
       </div>
     </div><!-- /.container -->
 
@@ -69,6 +81,22 @@
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/javascript">
+      function copyUrlList(containerid){
+        if (document.selection) {
+          var range = document.body.createTextRange();
+          range.moveToElementText(document.getElementById(containerid));
+          range.select().createTextRange();
+          document.execCommand("Copy");
+        } else if (window.getSelection) {
+          var range = document.createRange();
+          range.selectNode(document.getElementById(containerid));
+          window.getSelection().addRange(range);
+          document.execCommand("Copy");
+          alert("Links copied to clipboard");
+        }
+      }
+    </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
   </body>

@@ -8,8 +8,8 @@ from django.views.decorators.csrf import csrf_exempt
 import requests, json, urllib
 # Create your views here.
 
-# client_id = #"add client id here"
-# client_secret = #"add client secret here"
+# client_id = ""
+# client_secret = ""
 
 insta_auth_url = "https://api.instagram.com/oauth/authorize/?client_id=" + client_id
 insta_auth_url += "&redirect_uri=http://localhost:8000/authenticate/&response_type=code&scope=public_content"
