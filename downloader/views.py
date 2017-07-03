@@ -8,12 +8,12 @@ from django.views.decorators.csrf import csrf_exempt
 import requests, json, urllib
 # Create your views here.
 
-# client_id = ""
-# client_secret = ""
+# client_id = "" #insert client id here
+# client_secret = "" #insert client secret here
+
 
 insta_auth_url = "https://api.instagram.com/oauth/authorize/?client_id=" + client_id
-insta_auth_url += "&redirect_uri=http://localhost:8000/authenticate/&response_type=code&scope=public_content"
-		
+insta_auth_url += "&redirect_uri=http://tagdownloader.pythonanywhere.com/authenticate&response_type=code&scope=public_content"
 
 def authenticate(request):
 	if request.GET.get('code'):
@@ -26,7 +26,7 @@ def authenticate(request):
 			"client_id": client_id,
 			"client_secret": client_secret,
 			"grant_type": "authorization_code",
-			"redirect_uri": "http://localhost:8000/authenticate/",
+			"redirect_uri": "http://tagdownloader.pythonanywhere.com/authenticate",
 			"code": code,
 			}
 		response = requests.post(access_token_get_url, data).json()
@@ -36,16 +36,21 @@ def authenticate(request):
 		return HttpResponse("Something went wrong in authentication")
 
 
-# need to take care of this decorator 
-@csrf_exempt
+# need to take care of this decorator
 def index(request):
+	template = loader.get_template('downloader/index.html')
+	context = {}
+	return HttpResponse(template.render(context, request))
+
+@csrf_exempt
+def download(request):
 	auth = request.session.get('access_token')
 	if auth is None:
 		#redirect to authenticate and get access token
 		print ("redirecting to authentication")
 		return HttpResponseRedirect(insta_auth_url)
 	else:
-		if request.method == "GET": 
+		if request.method == "GET":
 			template = loader.get_template('downloader/search.html')
 			context = {
 				"search": True,
@@ -54,7 +59,7 @@ def index(request):
 		else:
 			access_token = auth
 			if request.POST.get('tag') and not request.POST.get("count"):
-				tag = request.POST.get('tag')
+				tag = request.POST.get('tag').strip()
 				get_tag_count_url = "https://api.instagram.com/v1/tags/"+tag+"?access_token="+access_token
 				response = requests.get(get_tag_count_url)
 				if response.json()["meta"]['code'] == 200:

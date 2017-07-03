@@ -12,13 +12,27 @@
     <!-- Bootstrap core CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
   	<style type="text/css">
-  		body {
-  			padding-top: 50px;
-  		}
-		.starter-template {
-			padding: 40px 15px;
-			text-align: center;
-		}
+    body {
+      padding-top: 70px;
+      padding-bottom: 30px;
+    }
+    .starter-template {
+      padding: 40px 15px;
+      text-align: center;
+    }
+    .theme-dropdown .dropdown-menu {
+      position: static;
+      display: block;
+      margin-bottom: 20px;
+    }
+
+    .theme-showcase > p > .btn {
+      margin: 5px 0;
+    }
+
+    .theme-showcase .navbar .container {
+      width: auto;
+    }
   	</style>
   </head>
 
@@ -33,13 +47,14 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">TagDownloder</a>
+          <a class="navbar-brand" href="/">TagDownloder</a>
         </div>
       </div>
     </nav>
 
     <div class="container">
 
+    {% if piclist %}
       <div class="starter-template">
         <div class="panel panel-default">
         <!-- Default panel contents -->
@@ -75,6 +90,16 @@
         </p>
         </div>        
       </div>
+      {% else %}
+
+      <div class="jumbotron">
+        <h3>
+        No images for the given tag were retrived from Instagram<br>
+        Click <a href="/download">here</a> to try again with different hashtag.
+        </h3>
+      </div>
+
+      {% endif %}
     </div><!-- /.container -->
 
 
