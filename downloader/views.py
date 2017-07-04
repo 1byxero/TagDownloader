@@ -4,16 +4,19 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_protect
 import requests, json, urllib
 # Create your views here.
 
-# client_id = "" #insert client id here
-# client_secret = "" #insert client secret here
+# client_id = "" #add client id here
+# client_secret = "" #add client secret here
+
+redirect_uri = "http://tagdownloader.pythonanywhere.com/authenticate/"
+# redirect_uri = "http://localhost:8000/authenticate/"
 
 
 insta_auth_url = "https://api.instagram.com/oauth/authorize/?client_id=" + client_id
-insta_auth_url += "&redirect_uri=http://tagdownloader.pythonanywhere.com/authenticate&response_type=code&scope=public_content"
+insta_auth_url += "&redirect_uri="+redirect_uri+"&response_type=code&scope=public_content"
 
 def authenticate(request):
 	if request.GET.get('code'):
@@ -26,7 +29,7 @@ def authenticate(request):
 			"client_id": client_id,
 			"client_secret": client_secret,
 			"grant_type": "authorization_code",
-			"redirect_uri": "http://tagdownloader.pythonanywhere.com/authenticate",
+			"redirect_uri": redirect_uri,
 			"code": code,
 			}
 		response = requests.post(access_token_get_url, data).json()
@@ -42,7 +45,7 @@ def index(request):
 	context = {}
 	return HttpResponse(template.render(context, request))
 
-@csrf_exempt
+@csrf_protect
 def download(request):
 	auth = request.session.get('access_token')
 	if auth is None:
