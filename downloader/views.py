@@ -8,11 +8,11 @@ from django.views.decorators.csrf import csrf_protect
 import requests, json, urllib
 # Create your views here.
 
-# client_id = "" #add client id here
-# client_secret = "" #add client secret here
+client_id = "ab0f6e848a54414aa4dcc17e43079c18"
+client_secret = "eafe1f28880c4d2c9df409ab5f50820a"
 
-redirect_uri = "http://tagdownloader.pythonanywhere.com/authenticate/"
-# redirect_uri = "http://localhost:8000/authenticate/"
+# redirect_uri = "http://tagdownloader.pythonanywhere.com/authenticate/"
+redirect_uri = "http://localhost:8000/authenticate/"
 
 
 insta_auth_url = "https://api.instagram.com/oauth/authorize/?client_id=" + client_id
